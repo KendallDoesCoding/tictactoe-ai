@@ -1,14 +1,14 @@
 # todo
 	# remove redundant code
-	# rework base x & o logic
+	# rework base x & o logic and remove unnecessary functions
+	# add comments
 
 
 import random
 import math
 
 
-
-
+# game_over checks whether the game has ended and returns the winner
 def game_over(board):
 	if board[1] == board[2] == board[3]:
 		winner = board[1]
@@ -42,6 +42,7 @@ def game_over(board):
 		return False, winner
 
 
+# print_board prints the current state of the game board
 def print_board(board):
 	b = '''
 	|%s|%s|%s|
@@ -53,6 +54,7 @@ def print_board(board):
 	print(b)
 
 
+# get_valid_moves returns a list of all valid moves for the current  board state
 def get_valid_moves(board):
 	valid_moves = []
 	for i in board:
@@ -63,15 +65,23 @@ def get_valid_moves(board):
 	return valid_moves
 
 
+# def check_move(move, board):
+	# if move in range(1, 10):
+	# 	if board[move] == 'X' or board[move] == 'O':
+	# 		print('invalid move(1)')
+	# 		return False
+	# 	else:
+	# 		return True
+	# else:
+	# 	print('invalid move(2)')
+	# 	return False
+
 def check_move(move, board):
-	if move in range(1, 10):
-		if board[move] == 'X' or board[move] == 'O':
-			print('invalid move(1)')
-			return False
-		else:
-			return True
+	if move in get_valid_moves(board):
+		return True
 	else:
-		print('invalid move(2)')
+		print('invalid move')
+		# print('invalid move: from check_move(move, board)')
 		return False
 
 
@@ -91,25 +101,24 @@ def check_move(move, board):
 
 
 
-def play(type, mover):
-	if type == 'human':
+def play(is_human, human, ai, board):
+	if is_human == True:
 		try:
-			move = int(input("where do you want to play?"))
+			move = int(input('where do you want to play %s?'%human))
 			if check_move(move, board) == True:
-				# make_move(mover, move)
-				board[move] = mover
+				board[move] = human
 				print_board(board)
 				print('valid moves:', get_valid_moves(board))
 			else:
-				play(type, mover)
+				play(is_human, human, board)
 		except:
 			print("Invalid move(0)")
-			play(type, mover)
-
+			play(is_human, human, ai, board)
 	else:
 	# random move:
-		# make_move(mover, random.choice(get_valid_moves(board)))
+		# board[random.choice(get_valid_moves(board))] = ai
 
+	# WARNING: i havent updated the minimax function. it WILL break things if uncommented.
 	# best move found using minimax:
 		# best_score = -math.inf
 		# best_move = random.choice(get_valid_moves(board))
@@ -132,35 +141,34 @@ def play(type, mover):
 		best_move = random.choice(get_valid_moves(board))
 	
 		for i in get_valid_moves(board):
-			# make_move(mover, i)
-			board[i] = mover
-			score = minimax_abp(mover, board, False, -math.inf, math.inf)
-			# make_move(i, i)
+			board[i] = ai
+			score = minimax_abp(ai, human, board, False, -math.inf, math.inf)
 			board[i] = i
 			if score > best_score:
 				best_score = score
 				best_move = i
-		board[best_move] = mover
+		board[best_move] = ai
 		print_board(board)
+		print('the ai played', ai, 'at', best_move)
 		print('valid moves:', get_valid_moves(board))
 
 
 
 
-def start_game(player):
+def start_game(human, ai, board):
 	while game_over(board)[0] == False:
-		if player == 'X':
-			play('human', 'X')
+		if human == 'X':
+			play(True, human, ai, board)
 			if game_over(board)[0] == True:
 				break
-			play('ai', 'O')
+			play(False, human, ai, board)
 			if game_over(board)[0] == True:
 				break
 		else:
-			play('ai', 'X')
+			play(False, human, ai, board)
 			if game_over(board)[0] == True:
 				break
-			play('human', 'O')
+			play(True, human, ai, board)
 			if game_over(board)[0] == True:
 				break
 	if game_over(board)[1] == None:
@@ -168,17 +176,58 @@ def start_game(player):
 	else:
 		print(game_over(board)[1], 'won')
 
+# WARNING: The minimax function hasent been updated. it WILL break things if uncommented. 
+# def minimax(mover, board, ismax):
+	# if mover == 'X':
+	# 	opp = 'O'
+	# else:
+	# 	opp = 'X'
 
-def minimax(mover, board, ismax):
-	if mover == 'X':
-		opp = 'O'
-	else:
-		opp = 'X'
+	# if game_over(board)[0] == True:
+	# 	if game_over(board)[1] == None:
+	# 		return 0
+	# 	elif game_over(board)[1] == mover:
+	# 		return 1
+	# 	else:
+	# 		return -1
+	# else:
+	# 	if ismax == True:
+	# 		best_score = -math.inf
+			
+	# 		for i in get_valid_moves(board):
+	# 			# make_move(mover, i)
+	# 			board[i] = mover
+	# 			score = minimax(mover, board, False)
+	# 			# make_move(i, i)
+	# 			board[i] = i
+	# 			if score > best_score:
+	# 				best_score = score
+	# 		return best_score
+	# 		# best_score = max(best_score, score)
+	# 		# return max(best_score, score)
 
+	# 	else:
+	# 		best_score = math.inf
+			
+	# 		for i in get_valid_moves(board):
+	# 			# make_move(opp, i)
+	# 			board[i] = opp
+	# 			score = minimax(mover, board, True)
+	# 			# make_move(i, i)
+	# 			board[i] = i
+	# 			if score < best_score:
+	# 				best_score = score
+	# 		return best_score
+	# 		# best_score = min(best_score, score)
+	# 		# return min(best_score, score)
+
+
+
+def minimax_abp(ai, human, board, ismax, alpha, beta):
 	if game_over(board)[0] == True:
 		if game_over(board)[1] == None:
 			return 0
-		elif game_over(board)[1] == mover:
+		elif game_over(board)[1] == ai:
 			return 1
 		else:
 			return -1
@@ -187,96 +236,62 @@ def minimax(mover, board, ismax):
 			best_score = -math.inf
 			
 			for i in get_valid_moves(board):
-				# make_move(mover, i)
-				board[i] = mover
-				score = minimax(mover, board, False)
-				# make_move(i, i)
-				board[i] = i
-				if score > best_score:
-					best_score = score
-			return best_score
-			# best_score = max(best_score, score)
-			# return max(best_score, score)
-
-		else:
-			best_score = math.inf
-			
-			for i in get_valid_moves(board):
-				# make_move(opp, i)
-				board[i] = opp
-				score = minimax(mover, board, True)
-				# make_move(i, i)
-				board[i] = i
-				if score < best_score:
-					best_score = score
-			return best_score
-			# best_score = min(best_score, score)
-			# return min(best_score, score)
-
-
-
-def minimax_abp(mover, board, ismax, alpha, beta):
-	if mover == 'X':
-		opp = 'O'
-	else:
-		opp = 'X'
-
-	if game_over(board)[0] == True:
-		if game_over(board)[1] == None:
-			return 0
-		elif game_over(board)[1] == mover:
-			return 1
-		else:
-			return -1
-	else:
-		if ismax == True:
-			best_score = -math.inf
-			
-			for i in get_valid_moves(board):
-				board[i] = mover
+				board[i] = ai
+				# only print the board if you want to see every move tried. might take time.
 				# print_board(board)
-				score = minimax_abp(mover, board, False, alpha, beta)
+				score = minimax_abp(ai, human, board, False, alpha, beta)
 				board[i] = i
 				if score > best_score:
 					best_score = score
-				if alpha > best_score:
-					best_score = alpha
-				if beta <= alpha:
+				if best_score > alpha:
+					alpha = best_score
+				if alpha >= beta:
 					break
 			return best_score
 		else:
 			best_score = math.inf
 			
 			for i in get_valid_moves(board):
-				board[i] = opp
+				board[i] = human
+				# only print the board if you want to see every move tried. might take time.
 				# print_board(board)
-				score = minimax_abp(mover, board, True, alpha, beta)
+				score = minimax_abp(ai, human, board, True, alpha, beta)
 				board[i] = i
 				if score < best_score:
 					best_score = score
-				if beta < best_score:
-					best_score = beta
-				if beta <= alpha:
+				if best_score < beta:
+					beta = best_score
+				if alpha >= beta:
 					break
 			return best_score
 
 
+def main():
+# dictionary 'board' represents the main tictactoe board 
+	board = {
+		1: 1,
+		2: 2,
+		3: 3,
+		4: 4,
+		5: 5,
+		6: 6,
+		7: 7,
+		8: 8,
+		9: 9
+	}
+# 'X' and 'O' are randomly assigned
+	options = ('X', 'O')
+	human = random.choice(options)
+	if human == 'X':
+		ai = 'O'
+	else:
+		ai = 'X'
 
-board = {
-	1: 1,
-    2: 2,
-    3: 3,
-    4: 4,
-    5: 5,
-    6: 6,
-    7: 7,
-    8: 8,
-    9: 9
-}
-options = ('X', 'O')
-player = random.choice(options)
+	print('you will be playing as', human)
+	print_board(board)
+	print('valid moves:', get_valid_moves(board))
+	start_game(human, ai, board)
 
-print('you will be playing as', player)
-print_board(board)
-print('valid moves:', get_valid_moves(board))
-start_game(player)
+
+if __name__ == '__main__':
+	main()
