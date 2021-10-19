@@ -2,10 +2,13 @@
 	# .
 
 
-
+#region imports
 import random
 import math
+#endregion
 
+
+#region function definitions
 
 
 # game_over checks whether the game has ended and returns the winner
@@ -272,6 +275,8 @@ def main():
 	print('valid moves:', get_valid_moves(board))
 	start_game(human, ai, board)
 
+
+#endregion
 
 
 if __name__ == '__main__':
