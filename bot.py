@@ -1,11 +1,11 @@
 # todo
-	# remove redundant code
-	# rework base x & o logic and remove unnecessary functions
-	# add comments
+	# test against online versions to check if ai behaves as expected
+
 
 
 import random
 import math
+
 
 
 # game_over checks whether the game has ended and returns the winner
@@ -54,7 +54,7 @@ def print_board(board):
 	print(b)
 
 
-# get_valid_moves returns a list of all valid moves for the current  board state
+# get_valid_moves returns a list of all valid moves for the current board state
 def get_valid_moves(board):
 	valid_moves = []
 	for i in board:
@@ -65,61 +65,37 @@ def get_valid_moves(board):
 	return valid_moves
 
 
-# def check_move(move, board):
-	# if move in range(1, 10):
-	# 	if board[move] == 'X' or board[move] == 'O':
-	# 		print('invalid move(1)')
-	# 		return False
-	# 	else:
-	# 		return True
-	# else:
-	# 	print('invalid move(2)')
-	# 	return False
-
+# check_move checks whether the move made by the player is valid
 def check_move(move, board):
 	if move in get_valid_moves(board):
 		return True
 	else:
-		print('invalid move')
-		# print('invalid move: from check_move(move, board)')
 		return False
 
 
-# def make_move(mover, move):
-	# board[move] = mover
-	# print_board(board)
-	# print('valid moves:', get_valid_moves(board))
-  
-
-# def get_move():
-	# try:
-		# move = int(input("where do you want to play?"))
-	# except:
-		# print("Invalid move")
-		# get_move()
-	# return move
-
-
-
+# play function is the function that actually executes the move entered by the human and the one made by the ai
 def play(is_human, human, ai, board):
 	if is_human == True:
 		try:
-			move = int(input('where do you want to play %s?'%human))
+			move = int(input('where do you want to play %s? '%human))
 			if check_move(move, board) == True:
 				board[move] = human
 				print_board(board)
 				print('valid moves:', get_valid_moves(board))
 			else:
-				play(is_human, human, board)
+				print('invalid move')
+				# print('invalid move: because check_move() == False')
+				play(is_human, human, ai, board)
 		except:
-			print("Invalid move(0)")
+			print("invalid move")
+			# print("invalid move: from play() exeption handling")
 			play(is_human, human, ai, board)
 	else:
 	# random move:
 		# board[random.choice(get_valid_moves(board))] = ai
 
-	# WARNING: i havent updated the minimax function. it WILL break things if uncommented.
 	# best move found using minimax:
+		# WARNING: i havent updated the minimax function. it WILL break things if uncommented.
 		# best_score = -math.inf
 		# best_move = random.choice(get_valid_moves(board))
 	
@@ -153,8 +129,7 @@ def play(is_human, human, ai, board):
 		print('valid moves:', get_valid_moves(board))
 
 
-
-
+# game loop
 def start_game(human, ai, board):
 	while game_over(board)[0] == False:
 		if human == 'X':
@@ -176,7 +151,7 @@ def start_game(human, ai, board):
 	else:
 		print(game_over(board)[1], 'won')
 
-# WARNING: The minimax function hasent been updated. it WILL break things if uncommented. 
+# WARNING: The minimax function hasent been updated. it WILL break things if uncommented. use minimax_abp() instead.
 # def minimax(mover, board, ismax):
 	# if mover == 'X':
 	# 	opp = 'O'
@@ -222,8 +197,9 @@ def start_game(human, ai, board):
 	# 		# return min(best_score, score)
 
 
-
-def minimax_abp(ai, human, board, ismax, alpha, beta):
+# minimax alogrithm with alpha beta pruning
+def minimax_abp(ai, human, board, is_maximizing, alpha, beta):
+	# exit conditions for this recursive function
 	if game_over(board)[0] == True:
 		if game_over(board)[1] == None:
 			return 0
@@ -231,8 +207,9 @@ def minimax_abp(ai, human, board, ismax, alpha, beta):
 			return 1
 		else:
 			return -1
+	# main algorithm
 	else:
-		if ismax == True:
+		if is_maximizing == True:
 			best_score = -math.inf
 			
 			for i in get_valid_moves(board):
@@ -266,8 +243,9 @@ def minimax_abp(ai, human, board, ismax, alpha, beta):
 			return best_score
 
 
+# main function
 def main():
-# dictionary 'board' represents the main tictactoe board 
+	# dictionary 'board' represents the main tictactoe board 
 	board = {
 		1: 1,
 		2: 2,
@@ -279,9 +257,11 @@ def main():
 		8: 8,
 		9: 9
 	}
-# 'X' and 'O' are randomly assigned
+
+	# 'X' and 'O' are randomly assigned and the game will be started
 	options = ('X', 'O')
 	human = random.choice(options)
+
 	if human == 'X':
 		ai = 'O'
 	else:
@@ -291,6 +271,7 @@ def main():
 	print_board(board)
 	print('valid moves:', get_valid_moves(board))
 	start_game(human, ai, board)
+
 
 
 if __name__ == '__main__':
