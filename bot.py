@@ -1,5 +1,5 @@
 # todo
-	# .
+	# add readme on github(??)
 
 
 #region imports
