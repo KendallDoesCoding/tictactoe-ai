@@ -152,7 +152,10 @@ def start_game(human, ai, board):
 	if game_over(board)[1] == None:
 		print('draw')
 	else:
-		print(game_over(board)[1], 'won')
+		if ai == game_over(board)[1]:
+			print('the ai won')
+		else:
+			print('THIS WASNT SUPPOSED TO HAPPEN. CONTACT ME ASAP.')
 
 # WARNING: The minimax function hasent been updated. it WILL break things if uncommented. use minimax_abp() instead.
 # def minimax(mover, board, ismax):
