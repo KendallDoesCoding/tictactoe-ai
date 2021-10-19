@@ -81,12 +81,12 @@ def check_move(move, board):
   
 
 # def get_move():
-# 	try:
-# 		move = int(input("where do you want to play?"))
-# 	except:
-# 		print("Invalid move")
-# 		get_move()
-# 	return move
+	# try:
+		# move = int(input("where do you want to play?"))
+	# except:
+		# print("Invalid move")
+		# get_move()
+	# return move
 
 
 
@@ -106,7 +106,10 @@ def play(type, mover):
 			play(type, mover)
 
 	else:
+	# random move:
 		# make_move(mover, random.choice(get_valid_moves(board)))
+
+	# best move found using minimax:
 		best_score = -math.inf
 		best_move = random.choice(get_valid_moves(board))
 	
@@ -163,7 +166,6 @@ def minimax(mover, board, ismax):
 			return -1
 	else:
 		if ismax == True:
-			
 			best_score = -math.inf
 			
 			for i in get_valid_moves(board):
