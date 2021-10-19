@@ -1,5 +1,5 @@
 # todo
-	# test against online versions to check if ai behaves as expected
+	# .
 
 
 
