@@ -115,7 +115,7 @@ def play(is_human, human, ai, board):
 		# print_board(board)
 		# print('valid moves:', get_valid_moves(board))
 
-	# best move found using minimax and aplha beta pruning:
+	# best move found using minimax and alpha beta pruning:
 		best_score = -math.inf
 		best_move = random.choice(get_valid_moves(board))
 	
