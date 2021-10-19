@@ -110,13 +110,30 @@ def play(type, mover):
 		# make_move(mover, random.choice(get_valid_moves(board)))
 
 	# best move found using minimax:
+		# best_score = -math.inf
+		# best_move = random.choice(get_valid_moves(board))
+	
+		# for i in get_valid_moves(board):
+		# 	# make_move(mover, i)
+		# 	board[i] = mover
+		# 	score = minimax(mover, board, False)
+		# 	# make_move(i, i)
+		# 	board[i] = i
+		# 	if score > best_score:
+		# 		best_score = score
+		# 		best_move = i
+		# board[best_move] = mover
+		# print_board(board)
+		# print('valid moves:', get_valid_moves(board))
+
+	# best move found using minimax and aplha beta pruning:
 		best_score = -math.inf
 		best_move = random.choice(get_valid_moves(board))
 	
 		for i in get_valid_moves(board):
 			# make_move(mover, i)
 			board[i] = mover
-			score = minimax(mover, board, False)
+			score = minimax_abp(mover, board, False, -math.inf, math.inf)
 			# make_move(i, i)
 			board[i] = i
 			if score > best_score:
@@ -177,6 +194,9 @@ def minimax(mover, board, ismax):
 				if score > best_score:
 					best_score = score
 			return best_score
+			# best_score = max(best_score, score)
+			# return max(best_score, score)
+
 		else:
 			best_score = math.inf
 			
@@ -189,6 +209,56 @@ def minimax(mover, board, ismax):
 				if score < best_score:
 					best_score = score
 			return best_score
+			# best_score = min(best_score, score)
+			# return min(best_score, score)
+
+
+
+def minimax_abp(mover, board, ismax, alpha, beta):
+	if mover == 'X':
+		opp = 'O'
+	else:
+		opp = 'X'
+
+	if game_over(board)[0] == True:
+		if game_over(board)[1] == None:
+			return 0
+		elif game_over(board)[1] == mover:
+			return 1
+		else:
+			return -1
+	else:
+		if ismax == True:
+			best_score = -math.inf
+			
+			for i in get_valid_moves(board):
+				board[i] = mover
+				# print_board(board)
+				score = minimax_abp(mover, board, False, alpha, beta)
+				board[i] = i
+				if score > best_score:
+					best_score = score
+				if alpha > best_score:
+					best_score = alpha
+				if beta <= alpha:
+					break
+			return best_score
+		else:
+			best_score = math.inf
+			
+			for i in get_valid_moves(board):
+				board[i] = opp
+				# print_board(board)
+				score = minimax_abp(mover, board, True, alpha, beta)
+				board[i] = i
+				if score < best_score:
+					best_score = score
+				if beta < best_score:
+					best_score = beta
+				if beta <= alpha:
+					break
+			return best_score
+
 
 
 board = {
