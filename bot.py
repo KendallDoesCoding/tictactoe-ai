@@ -1,5 +1,6 @@
 # todo
-	#add alpha beta pruning 
+	# remove redundant code
+	# rework base x & o logic
 
 
 import random
