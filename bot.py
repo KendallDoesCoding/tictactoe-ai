@@ -1,5 +1,4 @@
 # todo
-	# error is thrown when move input is not an int. handle that
 	#add alpha beta pruning 
 
 
@@ -66,12 +65,12 @@ def get_valid_moves(board):
 def check_move(move, board):
 	if move in range(1, 10):
 		if board[move] == 'X' or board[move] == 'O':
-			# print('invalid move(1)')
+			print('invalid move(1)')
 			return False
 		else:
 			return True
 	else:
-		# print('invalid move(2)')
+		print('invalid move(2)')
 		return False
 
 
@@ -81,16 +80,29 @@ def check_move(move, board):
 	# print('valid moves:', get_valid_moves(board))
   
 
+# def get_move():
+# 	try:
+# 		move = int(input("where do you want to play?"))
+# 	except:
+# 		print("Invalid move")
+# 		get_move()
+# 	return move
+
+
 
 def play(type, mover):
 	if type == 'human':
-		move = int(input("where do you want to play?"))
-		if check_move(move, board) == True:
-			# make_move(mover, move)
-			board[move] = mover
-			print_board(board)
-			print('valid moves:', get_valid_moves(board))
-		else:
+		try:
+			move = int(input("where do you want to play?"))
+			if check_move(move, board) == True:
+				# make_move(mover, move)
+				board[move] = mover
+				print_board(board)
+				print('valid moves:', get_valid_moves(board))
+			else:
+				play(type, mover)
+		except:
+			print("Invalid move(0)")
 			play(type, mover)
 
 	else:
