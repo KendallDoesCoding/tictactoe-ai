@@ -1,5 +1,6 @@
 # todo
 	# add readme on github
+	# check if conditions are proper in game_over()
 
 
 #region imports
